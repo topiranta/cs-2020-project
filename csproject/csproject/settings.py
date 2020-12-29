@@ -51,6 +51,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'csproject.urls'
+#SESSION_ENGINE = 'csproject.sessionmgmt'
 
 TEMPLATES = [
     {
