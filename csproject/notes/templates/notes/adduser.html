@@ -1,0 +1,15 @@
+<html>
+    <head>
+        <title>Hi</title>
+    </head>
+
+    <body>
+
+    <form action="user/" method="POST">
+            {% csrf_token %}
+            <input type="text" name="owner"/>
+            <input type="submit"/>
+        </form>
+
+    </body>
+</html>
