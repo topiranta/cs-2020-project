@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 import sqlite3
+import json
 from django.template import loader
 
 def index(request):
@@ -20,13 +21,48 @@ def addUser(request):
     cursor = conn.cursor()
     cursor.execute("INSERT INTO notes_owner (nickname) VALUES (\'" + owner + "\')")
     conn.commit()
+    conn.close()
 
     return redirect('/notes/')
 
-def badSessionRequest(request):
-    return HttpResponse("Session list will be displayed here")
+def error(request):
+    return HttpResponse("errr")
 
 def note(request):
-    
+
+
+    if request.method == 'GET':
+
+        notes = []
+        owners = []
+        sessionOwner = request.GET.get('owner')
+        ownerId = ''
+        conn = sqlite3.connect('db.sqlite3')
+        cursor = conn.cursor()
+
+        for row in cursor.execute("SELECT id, nickname FROM notes_owner"):
+            owners.append(row)
+        print(owners)
+
+        for o in owners:
+
+            if o[1] == sessionOwner:
+
+                ownerId = str(o[0])
+                pass
+
+        if ownerId == '':
+
+            return HttpResponse('Owner not in list of owners ' + str(owners))
+
+
+        for row in cursor.execute("SELECT note_text FROM notes_note WHERE owner_id =\'" + ownerId + "\'"):
+
+            notes.append(row)
+
+        return HttpResponse(json.dumps(notes))
+
+
+
 
     return redirect('/notes/')
