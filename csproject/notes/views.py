@@ -29,7 +29,7 @@ def addUser(request):
     return redirect('/notes/')
 
 def error(request):
-    return HttpResponse("errr")
+    return HttpResponse("error")
 
 @csrf_exempt
 def note(request):
