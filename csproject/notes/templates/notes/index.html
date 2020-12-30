@@ -6,10 +6,29 @@
     <body>
 		Hi {{owner}}!
 
-        Your notes will be displayed here.
-
+        <h4>List of your notes</h4>
         <ul id="notes">
         </ul>
+
+        <h4>Add a note</h4>
+        <form action="note/" method="POST">
+            {% csrf_token %}
+            <p>
+                <input type="text" name="text"/>
+                <input type="hidden" name="owner" value="{{owner}}"/>
+                <br>
+                Insert a note
+            </p>
+            <input type="submit"/>
+        </form>
+
+        <h4>User info</h4>
+        <p>
+            User: {{owner}}
+            <br>
+            Birth year: {{birthYear}}
+
+        </p>
 
         <!--
 

@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 import sqlite3
 import json
+from django.views.decorators.csrf import csrf_exempt
 from django.template import loader
 
 def index(request):
@@ -10,12 +11,15 @@ def index(request):
         return render(request, 'notes/adduser.html')
 
     owner = request.session['owner']
-    return render(request, 'notes/index.html', {'owner' : owner})
+    birthYear = request.session['birthYear']
+    return render(request, 'notes/index.html', {'owner' : owner, 'birthYear' : birthYear})
 
 def addUser(request):
 
     owner = request.POST.get('owner')
+    birthYear = request.POST.get('birthYear')
     request.session['owner'] = owner
+    request.session['birthYear'] = birthYear
 
     conn = sqlite3.connect('db.sqlite3')
     cursor = conn.cursor()
@@ -28,11 +32,18 @@ def addUser(request):
 def error(request):
     return HttpResponse("errr")
 
+@csrf_exempt
 def note(request):
 
     notes = []
     owners = []
-    sessionOwner = request.GET.get('owner')
+    sessionOwner = ''
+
+    if request.method == 'GET':
+        sessionOwner = request.GET.get('owner')
+    elif request.method == 'POST':
+        sessionOwner = request.POST.get('owner')
+
     ownerId = ''
     conn = sqlite3.connect('db.sqlite3')
     cursor = conn.cursor()
@@ -48,6 +59,8 @@ def note(request):
             pass
 
     if ownerId == '':
+
+        conn.close()
         return HttpResponse('Owner not in list of owners ' + str(owners))
 
 
@@ -63,16 +76,21 @@ def note(request):
             print(strng)
             notes.append(strng)
 
+        conn.close()
         return HttpResponse(json.dumps(notes))
 
     if request.method == 'POST':
 
-        
-
-        return HttpResponse("note saved")
-
-
+        text = str(request.POST.get('text'))
+        cursor.execute("INSERT INTO notes_note (owner_id, note_text) VALUES (\'" + ownerId + "\', \'" + text + "\')")
+        conn.commit()
 
 
+        conn.close()
+        return redirect('/notes/')
 
+
+
+
+    conn.close()
     return redirect('/notes/')

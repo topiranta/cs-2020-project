@@ -8,10 +8,19 @@
     <h2>Insert your name</h2>
 
     <form action="user/" method="POST">
-            {% csrf_token %}
+        {% csrf_token %}
+        <p>
             <input type="text" name="owner"/>
-            <input type="submit"/>
-        </form>
+            <br>
+            Insert your nickname
+        </p>
+        <p>
+            <input type="text" name="birthYear"/>
+            <br>
+            Insert your birth year (We respect your privacy! Your birth year will be kept safe and will not be shared with others!!!)
+        </p>
+        <input type="submit"/>
+    </form>
 
     </body>
 </html>
