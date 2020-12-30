@@ -1,7 +1,7 @@
 import django.contrib.sessions.backends.db as db
 
 class SessionStore(db.SessionStore):
-	
+
 	cache_key_prefix = 'notes-prefix-'
 
 	sessionCounter = 1

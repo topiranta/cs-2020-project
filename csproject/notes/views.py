@@ -30,37 +30,47 @@ def error(request):
 
 def note(request):
 
+    notes = []
+    owners = []
+    sessionOwner = request.GET.get('owner')
+    ownerId = ''
+    conn = sqlite3.connect('db.sqlite3')
+    cursor = conn.cursor()
+
+    for row in cursor.execute("SELECT id, nickname FROM notes_owner"):
+        owners.append(row)
+    print(owners)
+
+    for o in owners:
+
+        if o[1] == sessionOwner:
+            ownerId = str(o[0])
+            pass
+
+    if ownerId == '':
+        return HttpResponse('Owner not in list of owners ' + str(owners))
+
 
     if request.method == 'GET':
-
-        notes = []
-        owners = []
-        sessionOwner = request.GET.get('owner')
-        ownerId = ''
-        conn = sqlite3.connect('db.sqlite3')
-        cursor = conn.cursor()
-
-        for row in cursor.execute("SELECT id, nickname FROM notes_owner"):
-            owners.append(row)
-        print(owners)
-
-        for o in owners:
-
-            if o[1] == sessionOwner:
-
-                ownerId = str(o[0])
-                pass
-
-        if ownerId == '':
-
-            return HttpResponse('Owner not in list of owners ' + str(owners))
 
 
         for row in cursor.execute("SELECT note_text FROM notes_note WHERE owner_id =\'" + ownerId + "\'"):
 
-            notes.append(row)
+            strng = str(row).replace("'", "")
+            strng = strng.replace(",", "")
+            strng = strng.replace("(", "")
+            strng = strng.replace(")", "")
+            print(strng)
+            notes.append(strng)
 
         return HttpResponse(json.dumps(notes))
+
+    if request.method == 'POST':
+
+        
+
+        return HttpResponse("note saved")
+
 
 
 
