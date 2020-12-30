@@ -3,7 +3,6 @@ from django.http import HttpResponse, JsonResponse
 import sqlite3
 import json
 from django.views.decorators.csrf import csrf_exempt
-from django.template import loader
 
 def index(request):
     if 'owner' not in request.session:
@@ -77,7 +76,7 @@ def note(request):
             notes.append(strng)
 
         conn.close()
-        return HttpResponse(json.dumps(notes))
+        return HttpResponse(json.dumps(notes) + "<br> <br> <a href=\"/notes\">To front page</a>")
 
     if request.method == 'POST':
 

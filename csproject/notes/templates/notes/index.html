@@ -6,9 +6,7 @@
     <body>
 		Hi {{owner}}!
 
-        <h4>List of your notes</h4>
-        <ul id="notes">
-        </ul>
+        <h4>See list of your notes <a href="note/?owner={{owner}}">here!</a></h4>
 
         <h4>Add a note</h4>
         <form action="note/" method="POST">
@@ -29,71 +27,6 @@
             Birth year: {{birthYear}}
 
         </p>
-
-        <!--
-
-        <script inline="javascript">
-
-            var url = '/note/';
-
-            function loadNotes() {
-
-
-                var http = new XMLHttpRequest();
-                http.open("GET", 'notes', true);
-                http.setRequestHeader("Content-type", "application/json");
-
-                var obj = new Object();
-
-
-
-                http.onreadystatechange = function () {
-                    if (http.readyState === 4) {
-                        if (http.status === 200) {
-
-                            obj = JSON.parse(http.responseText);
-                            obj2 =obj.notes;
-
-
-                            var i
-
-                            for (i = 0; i < obj2.length; i++) {
-
-
-                                addNoteToList(JSON.parse(JSON.stringify(obj2[i])));
-
-
-                            }
-
-                        }
-                    }
-                }
-
-                http.send(url);
-
-
-
-
-            }
-		</script>
-
-        <script inline="javascript">
-
-        function addNoteToList(task) {
-                var liElement = document.createElement("li");
-                liElement.appendChild(document.createTextNode(task.name));
-                document.querySelector("#notes").appendChild(liElement);
-            }
-
-
-            window.onload = function () {
-                loadTasks();
-            };
-        </script>
-
-//-->
-
-
 
     </body>
 </html>
